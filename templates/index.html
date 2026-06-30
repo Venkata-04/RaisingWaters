@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rising Waters — Flood Risk Prediction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="ripple-bg" aria-hidden="true">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="none">
+      <path class="ripple ripple-1" d="M0,400 C300,440 300,360 600,400 C900,440 900,360 1200,400" />
+      <path class="ripple ripple-2" d="M0,480 C300,520 300,440 600,480 C900,520 900,440 1200,480" />
+      <path class="ripple ripple-3" d="M0,560 C300,600 300,520 600,560 C900,600 900,520 1200,560" />
+    </svg>
+  </div>
+
+  <header class="topbar">
+    <div class="wordmark">
+      <span class="wordmark-glyph">≈</span>
+      <span>Rising&nbsp;Waters</span>
+    </div>
+    <nav class="topnav">
+      <a href="{{ url_for('home') }}" class="active">Predict</a>
+      <a href="{{ url_for('history') }}">History</a>
+    </nav>
+  </header>
+
+  <main class="layout">
+
+    <section class="brief">
+      <p class="eyebrow">Flood Early-Warning System</p>
+      <h1>Enter today's<br><em>weather signal.</em></h1>
+      <p class="lede">
+        Six readings, one verdict. The model behind this page weighs rainfall against the
+        season it falls in — three inches in April reads very differently than three inches in August.
+      </p>
+
+      <dl class="gauge-legend">
+        <div>
+          <dt>0&nbsp;mm</dt>
+          <dd>dry ground, no signal</dd>
+        </div>
+        <div class="gauge-track" aria-hidden="true"><span></span></div>
+        <div>
+          <dt>4200&nbsp;mm</dt>
+          <dd>saturation, high risk</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="panel">
+      <form method="POST" action="{{ url_for('predict') }}" class="readings-form">
+
+        <div class="field">
+          <label for="temp">Temperature</label>
+          <div class="input-row">
+            <input type="number" step="0.1" id="temp" name="temp" placeholder="29" required>
+            <span class="unit">°C</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="humidity">Humidity</label>
+          <div class="input-row">
+            <input type="number" step="0.1" id="humidity" name="humidity" placeholder="74" required>
+            <span class="unit">%</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cloud_cover">Cloud cover</label>
+          <div class="input-row">
+            <input type="number" step="0.1" id="cloud_cover" name="cloud_cover" placeholder="36" required>
+            <span class="unit">%</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="annual">Annual rainfall <span class="hint">to date</span></label>
+          <div class="input-row">
+            <input type="number" step="0.1" id="annual" name="annual" placeholder="2925" required>
+            <span class="unit">mm</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <p class="group-label">Seasonal rainfall</p>
+          <div class="quad">
+            <div class="field">
+              <label for="jan_feb">Jan – Feb</label>
+              <input type="number" step="0.1" id="jan_feb" name="jan_feb" placeholder="28" required>
+            </div>
+            <div class="field">
+              <label for="mar_may">Mar – May</label>
+              <input type="number" step="0.1" id="mar_may" name="mar_may" placeholder="377" required>
+            </div>
+            <div class="field">
+              <label for="jun_sep">Jun – Sep</label>
+              <input type="number" step="0.1" id="jun_sep" name="jun_sep" placeholder="2023" required>
+            </div>
+            <div class="field">
+              <label for="oct_dec">Oct – Dec</label>
+              <input type="number" step="0.1" id="oct_dec" name="oct_dec" placeholder="498" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="quad">
+          <div class="field">
+            <label for="avgjune">Average June rainfall</label>
+            <input type="number" step="0.01" id="avgjune" name="avgjune" placeholder="218.1" required>
+          </div>
+          <div class="field">
+            <label for="sub">Sub-region rainfall</label>
+            <input type="number" step="0.1" id="sub" name="sub" placeholder="440" required>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span>Run prediction</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h11m-4-5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <span>Model: Gradient Boosting · trained on 115 regional records</span>
+  </footer>
+
+</body>
+</html>

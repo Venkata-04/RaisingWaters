@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rising Waters — History</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="ripple-bg" aria-hidden="true">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="none">
+      <path class="ripple ripple-1" d="M0,400 C300,440 300,360 600,400 C900,440 900,360 1200,400" />
+      <path class="ripple ripple-2" d="M0,480 C300,520 300,440 600,480 C900,520 900,440 1200,480" />
+      <path class="ripple ripple-3" d="M0,560 C300,600 300,520 600,560 C900,600 900,520 1200,560" />
+    </svg>
+  </div>
+
+  <header class="topbar">
+    <div class="wordmark">
+      <span class="wordmark-glyph">≈</span>
+      <span>Rising&nbsp;Waters</span>
+    </div>
+    <nav class="topnav">
+      <a href="{{ url_for('home') }}">Predict</a>
+      <a href="{{ url_for('history') }}" class="active">History</a>
+    </nav>
+  </header>
+
+  <main class="history-layout">
+    <p class="eyebrow">Prediction history</p>
+    <h1>Every reading,<br><em>logged in order.</em></h1>
+
+    {% if records|length == 0 %}
+    <div class="empty-state">
+      <p>No predictions yet this session.</p>
+      <a href="{{ url_for('home') }}">Run your first reading →</a>
+    </div>
+    {% else %}
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Annual</th>
+          <th>Jun–Sep</th>
+          <th>Humidity</th>
+          <th>Cloud cover</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td class="mono">{{ loop.index }}</td>
+          <td class="mono">{{ r.annual }} mm</td>
+          <td class="mono">{{ r.jun_sep }} mm</td>
+          <td class="mono">{{ r.humidity }}%</td>
+          <td class="mono">{{ r.cloud_cover }}%</td>
+          <td>
+            <span class="tag {{ 'tag-flood' if r.prediction == 1 else 'tag-clear' }}">
+              {{ 'Flood risk' if r.prediction == 1 else 'Clear' }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </main>
+
+  <footer class="foot">
+    <span>Model: Gradient Boosting · trained on 115 regional records</span>
+  </footer>
+
+</body>
+</html>
